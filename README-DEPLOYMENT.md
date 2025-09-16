@@ -42,17 +42,26 @@ sudo chmod -R 775 /var/www/baazaar/storage /var/www/baazaar/bootstrap/cache
 ```
 
 ### 3. Configure Database
-Edit `.env` file with your database credentials:
+Edit `.env` file with your DigitalOcean database cluster credentials:
 ```bash
 nano .env
 ```
 
-Update these lines:
+**Important:** Update these database lines with your actual DigitalOcean cluster credentials:
 ```env
-DB_HOST=your-cluster-host.db.ondigitalocean.com
+DB_HOST=your-database-cluster-host
+DB_PORT=25060
 DB_DATABASE=your_database_name
-DB_USERNAME=your_username
+DB_USERNAME=your_username  
 DB_PASSWORD=your_password
+DB_SSLMODE=require
+```
+
+**Note:** The database credentials were provided separately for security.
+
+Test the connection:
+```bash
+php artisan migrate:status
 ```
 
 ### 4. Run Migrations
