@@ -1,0 +1,39 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: /sitemap.xml
+
+# Block admin area
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /addresses/
+Disallow: /checkout
+Disallow: /setup-addresses
+Disallow: /skip-address-setup
+
+# Block authentication pages
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password/
+Disallow: /confirm-password
+Disallow: /verify-email/
+
+# Block API and system routes
+Disallow: /livewire/
+Disallow: /docs/api
+Disallow: /_boost/
+
+# Block file uploads
+Disallow: /storage/
+
+# Allow important pages
+Allow: /
+Allow: /categories
+Allow: /category/
+Allow: /product/
+Allow: /terms
+Allow: /privacy
+Allow: /refunds
