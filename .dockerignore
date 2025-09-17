@@ -1,0 +1,55 @@
+# Laravel specific
+.env
+.env.*
+!.env.production
+vendor/
+node_modules/
+public/hot
+public/storage
+storage/*.key
+storage/pail
+
+# Build artifacts
+/public/build
+/public/mix-manifest.json
+
+# Logs
+*.log
+storage/logs/*
+!storage/logs/.gitkeep
+
+# Cache
+bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+.phpunit.result.cache
+
+# Development
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.phpactor.json
+auth.json
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+README-DEPLOYMENT.md
+CLAUDE.md
+
+# Testing
+phpunit.xml
+tests/
+
+# Docker (avoid recursion)
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Deployment scripts
+deploy-*.sh
+deploy-credentials.sh

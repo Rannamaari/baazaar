@@ -1,0 +1,47 @@
+version: '3.8'
+
+# Production override for docker-compose.yml
+services:
+  app:
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - LOG_LEVEL=info
+      - OPCACHE_ENABLE=1
+      - OPCACHE_MEMORY_CONSUMPTION=128
+      - OPCACHE_MAX_ACCELERATED_FILES=4000
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  redis:
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # SSL/TLS termination with Caddy (alternative to nginx + certbot)
+  caddy:
+    image: caddy:2-alpine
+    container_name: baazaar-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - baazaar-network
+    environment:
+      - DOMAIN=baazaar.mv
+
+volumes:
+  caddy-data:
+  caddy-config:
