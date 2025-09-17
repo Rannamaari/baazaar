@@ -166,11 +166,23 @@ setup_laravel() {
         echo
     fi
     
+    # Ensure we're using PostgreSQL
+    sed -i "s|^DB_CONNECTION=.*|DB_CONNECTION=pgsql|" .env
     sed -i "s|^DB_HOST=.*|DB_HOST=${DB_HOST}|" .env
     sed -i "s|^DB_PORT=.*|DB_PORT=${DB_PORT}|" .env
     sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${DB_DATABASE}|" .env
     sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USERNAME}|" .env
     sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASSWORD}|" .env
+    sed -i "s|^DB_SSLMODE=.*|DB_SSLMODE=require|" .env
+    
+    # Clear config cache to ensure new settings are loaded
+    php artisan config:clear
+    
+    # Show database configuration for debugging
+    log_info "Database configuration:"
+    echo "Connection: $(php artisan tinker --execute="echo config('database.default');")"
+    echo "Host: $(grep "^DB_HOST=" .env | cut -d= -f2)"
+    echo "Database: $(grep "^DB_DATABASE=" .env | cut -d= -f2)"
     
     # Test database connection
     log_info "Testing database connection..."
