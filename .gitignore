@@ -4,6 +4,7 @@
 .env.backup
 .env.production
 .env.credentials
+deploy-credentials.sh
 .phpactor.json
 .phpunit.result.cache
 /.fleet
