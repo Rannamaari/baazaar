@@ -104,13 +104,24 @@ install_packages() {
 }
 
 clone_repository() {
-    log_info "Cloning repository..."
+    log_info "Setting up repository..."
     
     if [ -d "$APP_DIR" ]; then
         log_info "Directory exists, updating..."
         cd "$APP_DIR"
-        git fetch origin
-        git reset --hard origin/main
+        
+        # Check if it's a git repository
+        if [ -d ".git" ]; then
+            git fetch origin
+            git reset --hard origin/main
+            git clean -fd
+        else
+            log_info "Not a git repository, removing and cloning fresh..."
+            cd /var/www
+            sudo rm -rf baazaar
+            git clone "$REPO_URL" "$APP_DIR"
+            cd "$APP_DIR"
+        fi
     else
         sudo mkdir -p /var/www
         sudo chown $USER:$USER /var/www
