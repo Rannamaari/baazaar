@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Widgets\RecentOrdersTable;
 use App\Filament\Widgets\StatsOverview;
-use App\Http\Middleware\AdminMiddleware;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -58,7 +57,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                AdminMiddleware::class,
             ])
             ->login()
             ->registration(false)
