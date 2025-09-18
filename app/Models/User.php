@@ -26,6 +26,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         'phone',
         'password',
         'email_verified_at',
+        'is_admin',
     ];
 
     /**
@@ -48,6 +49,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 
@@ -113,5 +115,13 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function preOrders(): HasMany
     {
         return $this->hasMany(PreOrder::class);
+    }
+
+    /**
+     * Check if the user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
     }
 }
