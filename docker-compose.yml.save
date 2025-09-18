@@ -1,0 +1,76 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: baazaar-app
+    restart: unless-stopped
+  working_dir: /var/www/html
+  volumes:
+    - ./:/var/www/html
+    #  - ./storage:/var/www/html/storage
+    #  - ./public/storage:/var/www/html/public/storage
+    networks:
+      - baazaar-network
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_KEY=${APP_KEY}
+      - APP_URL=https://baazaar.mv
+      - DB_CONNECTION=pgsql
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_SSLMODE=require
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_STORE=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    depends_on:
+      - redis
+    ports:
+      - "80:80"
+      - "443:443"
+
+  redis:
+    image: redis:7-alpine
+    container_name: baazaar-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - baazaar-network
+    ports:
+      - "6379:6379"
+
+  # Optional: Database container for local development
+  # Remove this in production since you're using DigitalOcean managed database
+  postgres:
+    image: postgres:16-alpine
+    container_name: baazaar-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: baazaar
+      POSTGRES_USER: baazaar
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - baazaar-network
+    ports:
+      - "5432:5432"
+    profiles:
+      - development
+
+volumes:
+  redis-data:
+  postgres-data:
+
+networks:
+  baazaar-network:
+    driver: bridge

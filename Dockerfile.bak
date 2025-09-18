@@ -1,0 +1,54 @@
+FROM php:8.4-fpm
+
+# System deps for PHP extensions
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl unzip zip \
+    libicu-dev \
+    libzip-dev \
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# GD needs explicit JPEG/Freetype flags
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype
+
+# Core PHP extensions for Laravel (+opcache)
+RUN docker-php-ext-install -j$(nproc) \
+    bcmath exif pcntl intl zip gd opcache pdo_mysql
+
+# Redis via PECL
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
+# Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Workdir
+WORKDIR /var/www/html
+
+# Copy app (use build context files if needed; docker-compose usually mounts volume)
+# COPY . /var/www/html
+
+# Optimize PHP-FPM
+RUN { \
+      echo "pm = dynamic"; \
+      echo "pm.max_children = 20"; \
+      echo "pm.start_servers = 2"; \
+      echo "pm.min_spare_servers = 2"; \
+      echo "pm.max_spare_servers = 8"; \
+      echo "pm.max_requests = 500"; \
+    } > /usr/local/etc/php-fpm.d/zz-www.conf
+
+# Production PHP ini tweaks
+RUN { \
+      echo "opcache.enable=1"; \
+      echo "opcache.validate_timestamps=0"; \
+      echo "opcache.jit=1255"; \
+      echo "opcache.jit_buffer_size=64M"; \
+      echo "memory_limit=512M"; \
+      echo "upload_max_filesize=32M"; \
+      echo "post_max_size=32M"; \
+      echo "max_execution_time=120"; \
+    } > /usr/local/etc/php/conf.d/zz-custom.ini
+
+# Use www-data
+USER www-data
