@@ -67,6 +67,9 @@ setup_environment() {
         cp .env.production .env
     fi
     
+    # Ensure PostgreSQL is configured in .env
+    sed -i "s|^DB_CONNECTION=.*|DB_CONNECTION=pgsql|" .env
+    
     # Get database credentials
     if [ -z "${DB_HOST:-}" ]; then
         read -p "Database Host: " DB_HOST
@@ -91,6 +94,13 @@ setup_environment() {
         APP_KEY=$(docker run --rm php:8.4-cli php -r "echo 'base64:' . base64_encode(random_bytes(32));")
         sed -i "s|^APP_KEY=.*|APP_KEY=${APP_KEY}|" .env
     fi
+    
+    # Update .env with database credentials
+    sed -i "s|^DB_HOST=.*|DB_HOST=${DB_HOST}|" .env
+    sed -i "s|^DB_PORT=.*|DB_PORT=${DB_PORT}|" .env
+    sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${DB_DATABASE}|" .env
+    sed -i "s|^DB_USERNAME=.*|DB_USERNAME=${DB_USERNAME}|" .env
+    sed -i "s|^DB_PASSWORD=.*|DB_PASSWORD=${DB_PASSWORD}|" .env
     
     # Export environment variables for docker-compose
     export APP_KEY=$(grep "^APP_KEY=" .env | cut -d= -f2)
@@ -119,6 +129,15 @@ deploy_application() {
     # Wait for application to be ready
     log_info "Waiting for application to start..."
     sleep 10
+    
+    # Clear Laravel cache and check database connection
+    log_info "Clearing cache and checking database connection..."
+    docker-compose exec -T app php artisan config:clear
+    docker-compose exec -T app php artisan cache:clear
+    
+    # Show current database configuration for debugging
+    log_info "Database configuration:"
+    docker-compose exec -T app php artisan tinker --execute="echo 'Connection: ' . config('database.default'); echo PHP_EOL . 'Host: ' . config('database.connections.pgsql.host');"
     
     # Run migrations
     log_info "Running database migrations..."
