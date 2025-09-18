@@ -17,6 +17,9 @@
                     </div>
                     <span
                         class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Baazaar</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800 ring-1 ring-orange-200 animate-pulse">
+                        BETA
+                    </span>
                 </a>
             </div>
 
@@ -187,6 +190,9 @@
                     </div>
                     <span
                         class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Baazaar</span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800 ring-1 ring-orange-200 animate-pulse">
+                        BETA
+                    </span>
                 </a>
             </div>
 
@@ -336,6 +342,9 @@
                     </div>
                     <span
                         class="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Baazaar</span>
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800 ring-1 ring-orange-200 animate-pulse">
+                        BETA
+                    </span>
                 </a>
             </div>
 
