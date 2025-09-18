@@ -101,17 +101,14 @@
                         <label for="atoll" class="block text-lg font-semibold text-slate-700 mb-3">
                             Atoll <span class="text-red-500">*</span>
                         </label>
-                        <select id="atoll" 
-                                name="atoll" 
-                                required
-                                class="w-full px-6 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
-                            <option value="">Select Atoll</option>
-                            @foreach($atolls as $atoll)
-                                <option value="{{ $atoll->name }}" {{ old('atoll') == $atoll->name ? 'selected' : '' }}>
-                                    {{ $atoll->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <input type="text" 
+                               id="atoll" 
+                               name="atoll" 
+                               value="{{ old('atoll') }}"
+                               placeholder="e.g., Haa Alif, Kaafu, Alif Alif"
+                               required
+                               class="w-full px-6 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
+                        <p class="mt-1 text-sm text-slate-500">Enter your atoll name (e.g., Male, Haa Alif, Addu)</p>
                         @error('atoll')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -122,12 +119,14 @@
                         <label for="island" class="block text-lg font-semibold text-slate-700 mb-3">
                             Island <span class="text-red-500">*</span>
                         </label>
-                        <select id="island" 
-                                name="island" 
-                                required
-                                class="w-full px-6 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
-                            <option value="">Select Island</option>
-                        </select>
+                        <input type="text" 
+                               id="island" 
+                               name="island" 
+                               value="{{ old('island') }}"
+                               placeholder="e.g., Male, Hulhumale, Dhiffushi"
+                               required
+                               class="w-full px-6 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
+                        <p class="mt-1 text-sm text-slate-500">Enter your island name</p>
                         @error('island')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -218,32 +217,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Atoll-Island dependency
-    const atollSelect = document.getElementById('atoll');
-    const islandSelect = document.getElementById('island');
+    // Simple form validation (optional)
+    const atollInput = document.getElementById('atoll');
+    const islandInput = document.getElementById('island');
     
-    atollSelect.addEventListener('change', function() {
-        const selectedAtoll = this.value;
-        
-        // Clear island options
-        islandSelect.innerHTML = '<option value="">Select Island</option>';
-        
-        if (selectedAtoll) {
-            // Fetch islands for selected atoll via AJAX
-            fetch(`/addresses/${encodeURIComponent(selectedAtoll)}/islands`)
-                .then(response => response.json())
-                .then(islands => {
-                    islands.forEach(island => {
-                        const option = document.createElement('option');
-                        option.value = island;
-                        option.textContent = island;
-                        islandSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching islands:', error);
-                });
-        }
+    // Add some helpful formatting (capitalize first letters)
+    [atollInput, islandInput].forEach(input => {
+        input.addEventListener('blur', function() {
+            this.value = this.value
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        });
     });
 });
 </script>

@@ -102,17 +102,14 @@
                         <label for="atoll" class="block text-lg font-semibold text-slate-700 mb-3">
                             Atoll <span class="text-red-500">*</span>
                         </label>
-                        <select id="atoll" 
-                                name="atoll" 
-                                required
-                                class="w-full px-6 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
-                            <option value="">Select Atoll</option>
-                            @foreach($atolls as $atoll)
-                                <option value="{{ $atoll->name }}" {{ old('atoll', $address->atoll) == $atoll->name ? 'selected' : '' }}>
-                                    {{ $atoll->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <input type="text" 
+                               id="atoll" 
+                               name="atoll" 
+                               value="{{ old('atoll', $address->atoll) }}"
+                               placeholder="e.g., Haa Alif, Kaafu, Alif Alif"
+                               required
+                               class="w-full px-6 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
+                        <p class="mt-1 text-sm text-slate-500">Enter your atoll name (e.g., Male, Haa Alif, Addu)</p>
                         @error('atoll')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -123,12 +120,14 @@
                         <label for="island" class="block text-lg font-semibold text-slate-700 mb-3">
                             Island <span class="text-red-500">*</span>
                         </label>
-                        <select id="island" 
-                                name="island" 
-                                required
-                                class="w-full px-6 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
-                            <option value="">Select Island</option>
-                        </select>
+                        <input type="text" 
+                               id="island" 
+                               name="island" 
+                               value="{{ old('island', $address->island) }}"
+                               placeholder="e.g., Male, Hulhumale, Dhiffushi"
+                               required
+                               class="w-full px-6 py-4 border-2 border-slate-200 rounded-2xl text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
+                        <p class="mt-1 text-sm text-slate-500">Enter your island name</p>
                         @error('island')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror

@@ -31,9 +31,7 @@ class AddressController extends Controller
      */
     public function create(): View
     {
-        $atolls = DB::table('atolls')->orderBy('order')->get();
-
-        return view('addresses.create', compact('atolls'));
+        return view('addresses.create');
     }
 
     /**
@@ -85,9 +83,7 @@ class AddressController extends Controller
     {
         $this->authorize('update', $address);
 
-        $atolls = DB::table('atolls')->orderBy('order')->get();
-
-        return view('addresses.edit', compact('address', 'atolls'));
+        return view('addresses.edit', compact('address'));
     }
 
     /**
